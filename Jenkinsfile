@@ -1,18 +1,25 @@
 pipeline {
     agent any
     stages {
-        stage('Deploy') {
+        stage('Clone Code') {
             steps {
-                sh '''
-                # Stop and force remove old container if it already exists
-                docker rm -f jenkinscontainer || true
-                
-                # Build the new image using your Day 22 file blueprint
-                docker build -t myjenkinsapp .
-                
-                # Launch the container onto port 8095
-                docker run -d -p 8095:80 --name jenkinscontainer myjenkinsapp
-                '''
+                git 'https://github.com/DivithaReddyAlli/jenkins-docker-integration.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t myapp .'
+            }
+        }
+        stage('Stop Old Container') {
+            steps {
+                sh 'docker stop mycontainer || true'
+                sh 'docker rm mycontainer || true'
+            }
+        }
+        stage('Run New Container') {
+            steps {
+                sh 'docker run -d -p 3000:3000 --name mycontainer myapp'
             }
         }
     }
