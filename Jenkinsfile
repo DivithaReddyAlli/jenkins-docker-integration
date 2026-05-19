@@ -1,9 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Clone Code') {
+        stage('Verify Code') {
             steps {
-                git 'https://github.com/DivithaReddyAlli/jenkins-docker-integration.git'
+                // Jenkins already cloned the main branch automatically!
+                sh 'ls -la'
             }
         }
         stage('Build Docker Image') {
