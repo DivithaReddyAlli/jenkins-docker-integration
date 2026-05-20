@@ -19,8 +19,11 @@ pipeline {
             }
         }
         stage('Run New Container') {
-            steps {
-                sh 'docker run -d -p 3000:3000 --name mycontainer myapp'
+    steps {
+        sh 'docker run -d -p 80:8080 --name mycontainer myapp'
+    }
+}
+
             }
         }
     }
