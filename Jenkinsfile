@@ -3,7 +3,6 @@ pipeline {
     stages {
         stage('Verify Code') {
             steps {
-                // Jenkins already cloned the main branch automatically!
                 sh 'ls -la'
             }
         }
@@ -19,12 +18,10 @@ pipeline {
             }
         }
         stage('Run New Container') {
-    steps {
-        sh 'docker run -d -p 80:8080 --name mycontainer myapp'
-    }
-}
-
+            steps {
+                sh 'docker run -d -p 80:8080 --name mycontainer myapp'
             }
         }
     }
 }
+
