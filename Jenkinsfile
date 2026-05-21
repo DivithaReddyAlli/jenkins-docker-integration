@@ -7,8 +7,10 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t divithaalli/myapp:latest .'
+                    steps {
+            sh 'docker rmi -f divithaalli/myapp:latest || true'
+            sh 'docker build -t divithaalli/myapp:latest .'
+        }
             }
         }
         stage('Push to DockerHub') {
