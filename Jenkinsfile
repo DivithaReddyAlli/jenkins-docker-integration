@@ -7,10 +7,9 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-                    steps {
-            sh 'docker rmi -f divithaalli/myapp:latest || true'
-            sh 'docker build -t divithaalli/myapp:latest .'
-        }
+            steps {
+                sh 'docker rmi -f divithaalli/myapp:latest || true'
+                sh 'docker build -t divithaalli/myapp:latest .'
             }
         }
         stage('Push to DockerHub') {
@@ -23,14 +22,15 @@ pipeline {
         }
         stage('Stop Old Container') {
             steps {
-                sh 'docker stop mycontainer || true'
-                sh 'docker rm mycontainer || true'
+                sh 'docker stop myapp-container || true'
+                sh 'docker rm myapp-container || true'
             }
         }
         stage('Run New Container') {
             steps {
-                sh '/usr/bin/docker run -d --pull=always -p 80:80 --name mycontainer divithaalli/myapp:latest'
+                sh 'docker run -d --name myapp-container -p 80:80 divithaalli/myapp:latest'
             }
         }
     }
 }
+
