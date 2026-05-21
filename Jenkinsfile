@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Run New Container') {
             steps {
-                sh 'docker run -d -p 80:8080 --name mycontainer divithaalli/myapp:latest'
+                sh 'docker run -d -p 80:80 --name mycontainer divithaalli/myapp:latest'
             }
         }
     }
