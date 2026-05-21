@@ -26,11 +26,12 @@ pipeline {
                 sh 'docker rm myapp-container || true'
             }
         }
-        stage('Run New Container') {
+                stage('Run New Container') {
             steps {
-                sh 'docker run -d --name myapp-container -p 80:80 divithaalli/myapp:latest'
+                sh 'docker run -d --name myapp-container -p 8081:80 divithaalli/myapp:latest'
             }
         }
+
     }
 }
 
