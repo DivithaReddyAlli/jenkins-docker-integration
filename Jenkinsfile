@@ -25,14 +25,10 @@ pipeline {
                 sh 'docker rm mycontainer || true'
             }
         }
-                stage('Run New Container') {
+        stage('Run New Container') {
             steps {
                 sh '/usr/bin/docker run -d --pull=always -p 80:80 --name mycontainer divithaalli/myapp:latest'
             }
         }
-
-            }
-        }
     }
 }
-
