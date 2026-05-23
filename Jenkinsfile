@@ -1,37 +1,38 @@
 pipeline {
     agent any
+    environment {
+        IMAGE_NAME = "divithaalli/myapp"
+    }
     stages {
-        stage('Verify Code') {
+        stage('Clone Code') {
             steps {
                 sh 'ls -la'
             }
         }
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
-                sh 'docker rmi -f divithaalli/myapp:latest || true'
-                sh 'docker build -t divithaalli/myapp:latest .'
+                sh '/usr/bin/docker build -t $IMAGE_NAME:latest .'
             }
         }
         stage('Push to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh 'echo $PASS | docker login -u $USER --password-stdin'
-                    sh 'docker push divithaalli/myapp:latest'
+                    sh 'echo $PASS | /usr/bin/docker login -u $USER --password-stdin'
+                    sh '/usr/bin/docker push $IMAGE_NAME:latest'
                 }
             }
         }
-        stage('Stop Old Container') {
+        stage('Deploy to EC2 via SSH') {
             steps {
-                sh 'docker stop myapp-container || true'
-                sh 'docker rm myapp-container || true'
+                sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@localhost << 'EOF'
+                sudo /usr/bin/docker pull divithaalli/myapp:latest
+                sudo /usr/bin/docker stop myapp || true
+                sudo /usr/bin/docker rm myapp || true
+                sudo /usr/bin/docker run -d --restart always -p 80:3000 --name myapp divithaalli/myapp:latest
+                EOF
+                '''
             }
         }
-                stage('Run New Container') {
-            steps {
-                sh 'docker run -d --name myapp-container -p 8081:80 divithaalli/myapp:latest'
-            }
-        }
-
     }
 }
-
