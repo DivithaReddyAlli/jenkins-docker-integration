@@ -29,7 +29,7 @@ pipeline {
                 sudo /usr/bin/docker pull divithaalli/myapp:latest
                 sudo /usr/bin/docker stop myapp || true
                 sudo /usr/bin/docker rm myapp || true
-                sudo /usr/bin/docker run -d --restart always -p 80:3000 --name myapp divithaalli/myapp:latest
+                sudo /usr/bin/docker run -d --restart always -p 80:80 --name myapp divithaalli/myapp:latest
                 EOF
                 '''
             }
